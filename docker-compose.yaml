@@ -15,7 +15,7 @@ services:
     ports:
       - "8100:8100"
     volumes:
-      - static-content:/usr/src/app
+      - static-content:/usr/src/app/files
     networks:
       - geolocation-network
   geolocation-postcode:
@@ -34,7 +34,7 @@ services:
     ports:
       - "8200:8200"
     volumes:
-      - static-content:/usr/src/app
+      - static-content:/usr/src/app/files
     networks:
       - geolocation-network
   mongo:
