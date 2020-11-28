@@ -1,0 +1,57 @@
+version: "3"
+
+services:
+  geolocation-file:
+    build:
+      context: ./geolocation-file
+    image: geolocation-file
+    environment:
+      TZ: "America/Bogota"
+      GEOLOCATION-POSTCODE: http://geolocation-network:8200
+    depends_on:
+      - geolocation-postcode
+    expose:
+      - 8100
+    ports:
+      - "8100:8100"
+    volumes:
+      - static-content:/usr/src/app/files
+    networks:
+      - geolocation-network
+  geolocation-postcode:
+    build:
+      context: ./geolocation-postcode
+    image: geolocation-postcode
+    environment:
+      TZ: "America/Bogota"
+      MONGO_URL:
+      POSTCODE_MONGO_USER: ${POSTCODE_MONGO_USER}
+      POSTCODE_MONGO_PASSWORD: ${POSTCODE_MONGO_PASSWORD}
+    depends_on:
+      - mongo
+    expose:
+      - 8200
+    ports:
+      - "8200:8200"
+    volumes:
+      - static-content:/usr/src/app/files
+    networks:
+      - geolocation-network
+  mongo:
+    image: mongo
+    environment:
+      TZ: "America/Bogota"
+      MONGO_INITDB_ROOT_USERNAME: ${POSTCODE_MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${POSTCODE_MONGO_PASSWORD}
+    expose:
+      - 29017
+    ports:
+      - "29017:27017"
+    networks:
+      - geolocation-network
+    command: mongod
+volumes:
+  static-content:
+networks:
+  geolocation-network:
+    driver: bridge
