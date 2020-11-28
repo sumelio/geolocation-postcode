@@ -1,5 +1,5 @@
 {
-  "name": "geolocation-postcode",
+  "name": "geolocation-postcodes",
   "version": "1.0.0",
   "description": "geolocation integrate postcode",
   "main": "src/index.js",

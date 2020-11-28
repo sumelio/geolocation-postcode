@@ -1,1 +1,1 @@
-console.log('Geolocation file ....')
+console.log('Geolocation file')
