@@ -1,23 +1,38 @@
-import { Request } from 'express'
-import { uploadFile } from '../file.service'
-// Mock
-// jest.mock('../../models/categories')
-// jest.mock('../../../tags/models/tags')
+import { uploadFile, isFileValid } from '../file.service'
+import { UPLOAD_OK } from '../../constants/message';
 
-describe('TEST CATEGORIES SERVICES', () => {
-  test('The service update should return object', async () => {
-    // Tags.find.mockResolvedValue(tagsData)
-    // Tags.updateMany.mockResolvedValue({ res: 'OK' })
-    // Categories.updateOne.mockResolvedValue({ res: 'OK' })
-    // const data = { ...categories[0] }
-    // delete data.companyId
-    // delete data._id
-    // const result = await update({ data, user: { companyId: '5a5e068d81ebf1002516af18' }, id: categories[0]._id })
-    const req = ({ files: { postcodesgeo: { mv: () => { } } } }) 
-    const resp = {send: () => {}}
-    const next = () => {}
-    const result = uploadFile(req, resp, next) 
+describe('TEST FILE SERVICES UploadFile', () => {
+  test('The service update should return UPLOAD_OK', async () => {
+    const files = { postcodesgeo: { mv: (dir: string, callback: any) => { callback() } } }
+    const next = () => { return '' }
+    const result = await uploadFile(files, next)
 
-    expect(result).toEqual({ res: 'OK' })
+    expect(result.includes(UPLOAD_OK)).toBeTruthy()
+  })
+
+  test('The service update should return an Error', async () => {
+    const MESSAGE_ERROR = 'Produce any error'
+    const files = { postcodesgeo: { mv: (dir: string, callback: any) => { callback(MESSAGE_ERROR) } } }
+    const next = () => { return '' }
+    try {
+      await uploadFile(files, next)
+      fail('Test fail')
+    } catch (error) {
+      expect(error).toBe(MESSAGE_ERROR)
+    }
+  })
+})
+
+describe('TEST FILE SERVICES isFileValid', () => {
+  test('The service isFileValid should return TRUE', async () => {
+    const files = { postcodesgeo: { mv: (dir: string, callback: any) => { callback() } } }
+    const result = isFileValid(files)
+    expect(result).toBeTruthy()
+  })
+
+  test('The service isFileValid should return FALSE', async () => {
+    const files = { nothing: { mv: (dir: string, callback: any) => { callback() } } }
+    const result = isFileValid(files)
+    expect(result).toBeFalsy()
   })
 })
