@@ -7,6 +7,7 @@ services:
     image: geolocation-file
     environment:
       TZ: "America/Bogota"
+      PORT: 8100
       GEOLOCATION_POSTCODE: http://geolocation-network:8200
       FILES_PATH: ${FILES_PATH}
     depends_on:
