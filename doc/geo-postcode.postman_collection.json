@@ -21,13 +21,15 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8100/upload?postcodesgeo",
+					"raw": "http://localhost:8100/v1/api/upload?postcodesgeo",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8100",
 					"path": [
+						"v1",
+						"api",
 						"upload"
 					],
 					"query": [
