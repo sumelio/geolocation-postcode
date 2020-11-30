@@ -1,0 +1,47 @@
+{
+	"info": {
+		"_postman_id": "2cc87a27-d129-4c72-a122-a94a0062e6ee",
+		"name": "geo-postcode",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "upload-file-postcodegeo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "postcodesgeo",
+							"type": "file",
+							"src": "/Users/orioninfiniti/Downloads/postcodesgeo.csv"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8100/v1/api/upload?postcodesgeo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8100",
+					"path": [
+						"v1",
+						"api",
+						"upload"
+					],
+					"query": [
+						{
+							"key": "postcodesgeo",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
