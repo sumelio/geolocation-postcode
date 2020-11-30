@@ -1,38 +1,32 @@
-import * as fs from 'fs';
-import csv from 'csv-parser'
-import { format } from 'date-fns'
 
-import { FORMAT_DATE_LARGE, OK } from '../constants/message'
-import { PATH_FILE } from '../config'
-import { ProcessDto } from '../dto/process.dto';
-import { onPostcode, endProcess } from '../services/postcode.service'
-import Process from '../model/process.model'
+import { State } from '../dto/process.dto'
+import { getReadableCsv } from '../services/file.service'
+import {  OK } from '../constants/message'
+
+import { onPostcode, endProcess, createProcessGetPostCodes, isParameterValid } from '../services/postcode.service'
 
 export const postcode = async (req, res) => {
-   try {
-      console.log(req.body.fileName)
 
-      // console.log(`${PATH_FILE}${req.body.fileName}`)
-      const process = new ProcessDto(req.body.fileName, new Date())
+      if (!isParameterValid(req)) {
+         return res.status(400).send('processId parameter is not valid');
+      }
 
-      const processModel = new Process(process.toObject())
-      await processModel.save()
+      const process = await createProcessGetPostCodes(req.body.processId)
+
       try {
-         const readable = fs.createReadStream(`${PATH_FILE}${req.body.fileName}`).pipe(csv())
+         const readable = getReadableCsv(req.body.processId)
 
          readable
             .on('data', onPostcode(readable, process))
-            .on('end', endProcess(process, processModel.id));
-
+            .on('end', endProcess(process, State.FINISHED))
+            .on('error', endProcess(process, State.ERROR))
+            res.send(OK);
       } catch (error) {
          console.error(error)
          process.error = error
+         endProcess(process, State.ERROR)
+         res.status(500).send(error)
       }
-      res.send(OK);
-   } catch (error) {
-      // await errorProcess(req)
-      res.status(500).send(error)
-   }
 }
 
 

@@ -1,37 +1,69 @@
 import axios from 'axios';
 import Process from '../model/process.model';
+import GeoPostcode from '../model/geoPostcode.model';
 import { API_POSTCODE_OI } from '../config';
+import { ProcessDto, State } from '../dto/process.dto';
 
-const saveResult = (result, process) => {
-    if (result) {
-       process.counter.ok += 1
-       // save mongo geolocation with postcode
-    } else {
-       process.counter.nodata += 1
-       // geolocation without postcode
-    }
- }
+const getPostcodeFromResult = (result) => (Array.isArray(result) && result.length > 0) ? result[0].postcode : result.postcode
 
-export const onPostcode = (readable, process) => async (row) => {
+const setPostcode = async (result, process, geoPostcodeDto) => {
+   if (result) {
+      process.counter.ok += 1
+      geoPostcodeDto.postcode = getPostcodeFromResult(result)
+   } else {
+      process.counter.nodata += 1
+      geoPostcodeDto.detail = 'No Data Found'
+   }
+}
 
-    readable.pause()
-    const { data: { status, result } } = await axios.get(`${API_POSTCODE_OI}?lon=${row.lon}&lat=${row.lat}`)
-    // console.log('data', result )
-    if (status === 200) {
-       saveResult(result, process)
-    } else {
-       process.counter.error += 1
-       // geolocation error
-    }
-    setTimeout(() => {
-       console.debug(process.counter)
-       readable.resume();
-    }, 1);
- }
+export const createProcessGetPostCodes = async (processId) => {
+   const process = new ProcessDto(processId, new Date())
+   process.state = State.START
+   const processModel = new Process(process.toObject())
+   await processModel.save()
+   process.id = processModel.id
+   return process
+}
 
- export const endProcess = (process, id) => async () => {
-    process.endDate = new Date()
-    console.debug('CSV file successfully processed');
-    console.debug(process)
-    await Process.update({ _id: id}, process.toObject())
- }
+const savePostcode = async (geoPostcodeDto) => {
+   const { lon, lat } = geoPostcodeDto
+   const find = await GeoPostcode.findOne({ lon, lat })
+   if (find && find.id) {
+      await GeoPostcode.update({ id: find.id }, geoPostcodeDto)
+   } else {
+      const geoPostcode = new GeoPostcode(geoPostcodeDto)
+      await geoPostcode.save()
+   }
+}
+export const isParameterValid = (req) => req && req.body && req.body.processId
+
+export const onPostcode = (readable, process) => async ({ lon, lat }) => {
+
+   readable.pause()
+   const geoPostcodeDto = {
+      lon,
+      lat,
+      detail: undefined
+   }
+   const { data: { status, result } } = await axios.get(`${API_POSTCODE_OI}?lon=${lon}&lat=${lat}`)
+
+   if (status === 200) {
+      setPostcode(result, process, geoPostcodeDto)
+   } else {
+      process.counter.error += 1
+      geoPostcodeDto.detail = status
+   }
+   await savePostcode(geoPostcodeDto)
+   await Process.update({ _id: process.id }, process.toObject())
+   setTimeout(() => {
+      console.debug(process.counter)
+      readable.resume();
+   }, 1);
+}
+
+export const endProcess = (process: ProcessDto, state: State) => async () => {
+   process.endDate = new Date()
+   process.state = state
+   console.debug(process.toObject())
+   await Process.update({ _id: process.id }, process.toObject())
+}
