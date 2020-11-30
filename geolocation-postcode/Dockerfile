@@ -5,4 +5,4 @@ EXPOSE 8200
 ADD package.json package-lock.json /app/
 COPY . /app/
 
-CMD [ "node", "./src/index.js" ]
+CMD [ "node","."]

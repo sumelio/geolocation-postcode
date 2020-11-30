@@ -8,7 +8,7 @@ services:
     environment:
       TZ: "America/Bogota"
       PORT: 8100
-      GEOLOCATION_POSTCODE: http://geolocation-network:8200
+      GEOLOCATION_POSTCODE: http://geolocation-postcode:8200
       FILES_PATH: ${FILES_PATH}
     depends_on:
       - geolocation-postcode
@@ -17,7 +17,7 @@ services:
     ports:
       - "8100:8100"
     volumes:
-      - static-content:/usr/src/app/files
+      - static-content:/usr/src/app/files/
     networks:
       - geolocation-network
   geolocation-postcode:
@@ -27,7 +27,7 @@ services:
     environment:
       TZ: "America/Bogota"
       FILES_PATH: ${FILES_PATH}
-      POSTCODE_MONGO_URL: ${POSTCODE_MONGO_URL}
+      POSTCODE_MONGO_HOSTS_PORT: ${POSTCODE_MONGO_HOSTS_PORT}
       POSTCODE_MONGO_USER: ${POSTCODE_MONGO_USER}
       POSTCODE_MONGO_PASSWORD: ${POSTCODE_MONGO_PASSWORD}
     depends_on:
@@ -37,7 +37,7 @@ services:
     ports:
       - "8200:8200"
     volumes:
-      - static-content:/usr/src/app/files
+      - static-content:/usr/src/app/files/
     networks:
       - geolocation-network
   mongo:
@@ -48,9 +48,9 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${POSTCODE_MONGO_PASSWORD}
       FILES_PATH: ${FILES_PATH}
     expose:
-      - 29017
+      - 27017
     ports:
-      - "29017:27017"
+      - "27017:27017"
     networks:
       - geolocation-network
     command: mongod
