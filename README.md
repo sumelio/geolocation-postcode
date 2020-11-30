@@ -26,7 +26,7 @@ Primer se debe usar el siguiente servicio enviado el archivo CSV
 
 ![https://github.com/sumelio/geolocation-postcode/blob/main/req.png](https://github.com/sumelio/geolocation-postcode/blob/main/doc/req.png)
 
-Luego que el Id que retorna, se puede consultar para ver el estado del proceso
+Luego con el Id que retorna, se puede consultar para ver el estado del proceso
 ![https://github.com/sumelio/geolocation-postcode/blob/main/potcode.png](https://github.com/sumelio/geolocation-postcode/blob/main/doc/potcode.png)
 
 ## Consultar la base de datos de Mongo
