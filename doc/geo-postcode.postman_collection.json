@@ -16,29 +16,32 @@
 						{
 							"key": "postcodesgeo",
 							"type": "file",
-							"src": "/Users/orioninfiniti/Downloads/postcodesgeo.csv"
+							"src": "/Users/orioninfiniti/Downloads/postcodesgeo1.csv"
 						}
 					]
 				},
-				"url": {
-					"raw": "http://localhost:8100/v1/api/upload?postcodesgeo",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8100",
-					"path": [
-						"v1",
-						"api",
-						"upload"
-					],
-					"query": [
-						{
-							"key": "postcodesgeo",
-							"value": null
+				"url": "http://localhost:8100/v1/geolocation-file/api/upload"
+			},
+			"response": []
+		},
+		{
+			"name": "get-process-potcodegeo",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"processId\":\"postcodesgeo11\"  }",
+					"options": {
+						"raw": {
+							"language": "json"
 						}
-					]
-				}
+					}
+				},
+				"url": "http://localhost:8200/v1/geolocation-postcode/api/postcode/process/1606765713941"
 			},
 			"response": []
 		}
