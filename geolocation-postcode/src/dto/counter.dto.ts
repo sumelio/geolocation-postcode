@@ -22,4 +22,10 @@ export class Counter {
     set error(value: number) {
         this._error = value;
     }
+
+    toObject = () => ({
+       ok: this._ok,
+       nodata: this._nodata,
+       error: this._error
+    } )
  }

@@ -1,9 +1,6 @@
 import axios from 'axios';
-import { format } from 'date-fns'
+import Process from '../model/process.model';
 import { API_POSTCODE_OI } from '../config';
-
-import { FORMAT_DATE_LARGE } from '../constants/message'
-
 
 const saveResult = (result, process) => {
     if (result) {
@@ -32,8 +29,9 @@ export const onPostcode = (readable, process) => async (row) => {
     }, 1);
  }
 
- export const endProcess = (process) => () => {
-    process.endDate = format(new Date(), FORMAT_DATE_LARGE)
+ export const endProcess = (process, id) => async () => {
+    process.endDate = new Date()
     console.debug('CSV file successfully processed');
     console.debug(process)
+    await Process.update({ _id: id}, process.toObject())
  }
