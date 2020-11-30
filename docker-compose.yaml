@@ -48,9 +48,9 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${POSTCODE_MONGO_PASSWORD}
       FILES_PATH: ${FILES_PATH}
     expose:
-      - 29018
+      - 27017
     ports:
-      - "29018:27017"
+      - "27017:27017"
     networks:
       - geolocation-network
     command: mongod

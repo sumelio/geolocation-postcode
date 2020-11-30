@@ -16,6 +16,11 @@ const setPostcode = async (result, process, geoPostcodeDto) => {
    }
 }
 
+export const postcodeProcessById = async (id) => {
+   const find = await Process.findOne({processId: id})
+   return find
+}
+
 export const createProcessGetPostCodes = async (processId) => {
    const process = new ProcessDto(processId, new Date())
    process.state = State.START
@@ -53,6 +58,7 @@ export const onPostcode = (readable, process) => async ({ lon, lat }) => {
       process.counter.error += 1
       geoPostcodeDto.detail = status
    }
+   process.state = State.PROCESSING
    await savePostcode(geoPostcodeDto)
    await Process.update({ _id: process.id }, process.toObject())
    setTimeout(() => {

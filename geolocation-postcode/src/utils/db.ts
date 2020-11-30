@@ -42,7 +42,7 @@ class MongoConnection {
                 const mongoUrlServer = await this._mongoServer.getConnectionString()
                 await mongoose.connect(mongoUrlServer, opts)
             } else {
-                console.debug('connecting to mongo db...')
+                console.debug('connecting to mongo db...' + mongoUrl)
                 mongoose.connect(mongoUrl, opts)
             }
 
