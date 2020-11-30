@@ -18,7 +18,7 @@ const processSchema = new Schema<IProcessDocument>({
   counter: {type: Object},
   error: {type: String}
 }, {strict: true})
-  .index({processId: 1}, {unique: true, collation: {locale: 'en_US', strength: 1}, sparse: true})
+  .index({processId: 1}, {unique: true, collation: {strength: 1}, sparse: true})
 
 export interface IProcessModel extends Model<IProcessDocument> {
 }

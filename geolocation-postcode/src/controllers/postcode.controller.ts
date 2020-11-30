@@ -20,7 +20,7 @@ export const postcodeProcessById = async (req, res) => {
    }
 }
 export const postcode = async (req, res) => {
-
+   console.log('req', req.body)
    if (!isParameterValid(req)) {
       return res.status(400).send('processId parameter is not valid');
    }
@@ -28,7 +28,7 @@ export const postcode = async (req, res) => {
    const process = await createProcessGetPostCodes(req.body.processId)
 
    try {
-      const readable = getReadableCsv(req.body.processId)
+      const readable = await getReadableCsv(req.body.processId)
 
       readable
          .on('data', onPostcode(readable, process))

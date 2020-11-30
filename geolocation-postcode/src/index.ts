@@ -5,9 +5,9 @@ import { routes } from './routes/postcode.routes'
 
 
 async function startup() {
-    await new Promise((resolve, reject) => {
-        setTimeout(() => resolve('done'), 5000)
-      })
+    // await new Promise((resolve, reject) => {
+    //     setTimeout(() => resolve('done'), 5000)
+    //   })
     await db.open({})
 
     app.listen(PORT, () => {

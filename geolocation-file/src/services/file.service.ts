@@ -4,7 +4,7 @@ import { PATH_FILE } from '../config'
 const moveFile = async (files: any, next: any, fileProcessId: number): Promise<string> => {
 
     const result: string = await new Promise((resolve, reject) => {
-        files.postcodesgeo.mv(`${PATH_FILE}${fileProcessId}.cvs`, async (err) => {
+        files.postcodesgeo.mv(`${PATH_FILE}${fileProcessId}.csv`, async (err) => {
             if (err) {
                 return reject(err);
             }

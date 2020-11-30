@@ -14,7 +14,7 @@ const geoPostcodeSchema = new Schema<IGeoPostcodeDocument>({
   postcode: {type: String},
   detail: {type: String}
 }, {strict: true})
-  .index({lat: 1, lon: 1}, {unique: true, collation: {locale: 'en_US', strength: 1}, sparse: true})
+  .index({lat: 1, lon: 1}, {unique: true, collation: {strength: 1}, sparse: true})
 
 export interface IGeoPostcodeModel extends Model<IGeoPostcodeDocument> {
 }

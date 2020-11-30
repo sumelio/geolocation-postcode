@@ -8,7 +8,7 @@ services:
     environment:
       TZ: "America/Bogota"
       PORT: 8100
-      GEOLOCATION_POSTCODE: http://geolocation-network:8200
+      GEOLOCATION_POSTCODE: http://geolocation-postcode:8200
       FILES_PATH: ${FILES_PATH}
     depends_on:
       - geolocation-postcode
@@ -17,7 +17,7 @@ services:
     ports:
       - "8100:8100"
     volumes:
-      - static-content:/usr/src/app/files
+      - static-content:/usr/src/app/files/
     networks:
       - geolocation-network
   geolocation-postcode:
@@ -37,7 +37,7 @@ services:
     ports:
       - "8200:8200"
     volumes:
-      - static-content:/usr/src/app/files
+      - static-content:/usr/src/app/files/
     networks:
       - geolocation-network
   mongo:
