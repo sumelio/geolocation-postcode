@@ -62,7 +62,6 @@ export const onPostcode = (readable, process) => async ({ lon, lat }) => {
    await savePostcode(geoPostcodeDto)
    await Process.update({ _id: process.id }, process.toObject())
    setTimeout(() => {
-      console.debug(process.counter)
       readable.resume();
    }, 1);
 }
@@ -71,5 +70,5 @@ export const endProcess = (process: ProcessDto, state: State) => async () => {
    process.endDate = new Date()
    process.state = state
    console.debug(process.toObject())
-   await Process.update({ _id: process.id }, process.toObject())
+   await Process.update({ id: process.id }, process.toObject())
 }
