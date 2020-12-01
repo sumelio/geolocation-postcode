@@ -20,7 +20,6 @@ export const postcodeProcessById = async (req, res) => {
    }
 }
 export const postcode = async (req, res) => {
-   console.log('req', req.body)
    if (!isParameterValid(req)) {
       return res.status(400).send('processId parameter is not valid');
    }

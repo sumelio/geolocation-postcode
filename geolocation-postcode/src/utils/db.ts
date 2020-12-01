@@ -1,7 +1,6 @@
 /* istanbul ignore file */
 
 import mongoose from 'mongoose'
-import { MongoMemoryServer } from 'mongodb-memory-server'
 
 import { POSTCODE_MONGO_USER, POSTCODE_MONGO_PASSWORD, POSTCODE_MONGO_HOSTS_PORT } from '../config'
 
@@ -24,7 +23,6 @@ const opts = {
 class MongoConnection {
     private static _instance: MongoConnection
     private mongoUrl: string
-    private _mongoServer?: MongoMemoryServer
 
     static getInstance(): MongoConnection {
         if (!MongoConnection._instance) {
@@ -36,15 +34,10 @@ class MongoConnection {
     public async open({ mongoUrl = mongoUrlDefault }): Promise<void> {
         this.mongoUrl = mongoUrl
         try {
-            if (mongoUrl === 'inmemory') {
-                console.debug('connecting to inmemory mongo db')
-                this._mongoServer = new MongoMemoryServer()
-                const mongoUrlServer = await this._mongoServer.getConnectionString()
-                await mongoose.connect(mongoUrlServer, opts)
-            } else {
-                console.debug('connecting to mongo db...' + mongoUrl)
-                mongoose.connect(mongoUrl, opts)
-            }
+
+            console.debug('connecting to mongo db...' + mongoUrl)
+            mongoose.connect(mongoUrl, opts)
+
 
             mongoose.connection.on('connected', () => {
                 console.info('Mongo: connected')
@@ -58,7 +51,7 @@ class MongoConnection {
                 console.error(`Mongo:  ${String(err)}`)
                 if (err.name === "MongoNetworkError") {
                     setTimeout(() => {
-                        mongoose.connect(mongoUrl, opts).catch((errors) => { console.error(errors)})
+                        mongoose.connect(mongoUrl, opts).catch((errors) => { console.error(errors) })
                     }, 5000)
                 }
             })
@@ -71,9 +64,6 @@ class MongoConnection {
     public async close(): Promise<void> {
         try {
             await mongoose.disconnect()
-            if (this.mongoUrl === 'inmemory') {
-                await this._mongoServer!.stop()
-            }
         } catch (err) {
             console.error(`db.open: ${err}`)
             throw err
