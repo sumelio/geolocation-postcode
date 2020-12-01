@@ -2,17 +2,7 @@
 
 ## Como ejecutar este proyecto?
 
-1. Primero ingresar a la carpeta geolocation-file y ejecutar npm install
-```
- cd geolocation-file
- npm install
-```
-2. Primero ingresar a la carpeta geolocation-postcode y ejecutar npm install
-```
- cd geolocation-postcode
- npm install
-```
-3. En la carpeta raíz ejecutar el siguiente comando:
+ En la carpeta raíz ejecutar el siguiente comando:
 ```
  docker-compose up --build -d
 ```
